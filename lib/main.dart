@@ -4,12 +4,14 @@ import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
 import 'package:app_links/app_links.dart';
 import 'package:learningpayscreen/succesScreen.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:learningpayscreen/cancelScreen.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: ".env");
   handleIncomingLinks();
   runApp(const MyApp());
 }
@@ -146,10 +148,8 @@ class PayScreen extends StatelessWidget {
 }
 
 Future<String> getPayPalAccessToken() async {
-  const clientId =
-      'ATrW1RjpF5enEIKg5ir70N8iIjGAcSTjIgssE1-bSwH9vpkTOF0SCaXBPfVL2A7sz_qqaUn0aOScG0Ok';
-  const secret =
-      'EK85D9nmDabAHQhGDg7LXYSzrkEVmhZ6U8dtY0Z1tDzdKZOdV4FSTOVPf-qwCJ96NyAy7XROv-Vsv2MC';
+  String clientId = dotenv.env["payPal_ClientID"]!;
+  String secret = dotenv.env["payPal_SecretKey"]!;
 
   final basicAuth = 'Basic ${base64Encode(utf8.encode('$clientId:$secret'))}';
 
